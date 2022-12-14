@@ -1,0 +1,6 @@
+Найдите среднюю скорость ПК, выпущенных производителем A.
+
+SELECT avg(pc.speed)
+FROM pc 
+JOIN product pr on pc.model = pr.model
+WHERE pr.maker = 'A';
