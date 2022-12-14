@@ -1,0 +1,7 @@
+Найдите максимальную цену ПК, выпускаемых каждым производителем, у которого есть модели в таблице PC.
+Вывести: maker, максимальная цена
+
+SELECT maker , max(price)
+FROM pc 
+JOIN product p on pc.model= p.model  
+GROUP BY maker 
