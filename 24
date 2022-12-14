@@ -1,0 +1,13 @@
+Перечислите номера моделей любых типов, имеющих самую высокую цену по всей имеющейся в базе данных продукции.
+
+SELECT distinct model, price FROM pc WHERE pc.price = (SELECT MAX(price) FROM pc)  
+UNION 
+SELECT distinct model, price FROM printer WHERE printer.price = (SELECT MAX(price) FROM printer)  
+) as t 
+WHERE t.price=(SELECT MAX(price) FROM ( 
+SELECT distinct price FROM laptop WHERE laptop.price = (SELECT MAX(price) FROM laptop)  
+UNION 
+SELECT distinct price FROM pc WHERE pc.price = (SELECT MAX(price) FROM pc)  
+UNION 
+SELECT distinct price FROM printer WHERE printer.price = (SELECT MAX(price) FROM printer)  
+) as t1 ) 
