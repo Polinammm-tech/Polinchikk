@@ -1,0 +1,13 @@
+Найдите производителей принтеров, которые производят ПК с наименьшим объемом RAM и с самым быстрым процессором среди всех ПК, имеющих наименьший объем RAM. Вывести: Maker
+
+
+SELECT distinct product.maker 
+FROM product 
+WHERE product.type='Printer'  
+INTERSECT 
+SELECT distinct product.maker 
+FROM product 
+JOIN pc on pc.model=product.model  
+WHERE product.type='PC' AND pc.ram=(SELECT MIN(ram) FROM pc)  
+AND pc.speed = (SELECT MAX(speed) FROM (SELECT distinct speed FROM pc 
+WHERE pc.ram=(SELECT MIN(ram) FROM pc)) as t) 
