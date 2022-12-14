@@ -1,0 +1,4 @@
+Найдите среднюю скорость ПК.
+
+SELECT avg(speed) AS 'Avg_speed'
+FROM PC; `
