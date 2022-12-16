@@ -1,0 +1,6 @@
+Укажите сражения, которые произошли в годы, не совпадающие ни с одним из годов спуска кораблей на воду.
+
+SELECT name 
+  FROM battles 
+  WHERE DATEPART(yy, date) not in (select DATEPART(yy, date) from battles 
+  JOIN ships on DATEPART(yy, date)=launched) 
