@@ -1,0 +1,6 @@
+Используя таблицу Product, определить количество производителей, выпускающих по одной модели.
+
+SELECT COUNT(maker) as Quantity FROM 
+(
+SELECT maker FROM product GROUP BY maker HAVING COUNT(*) = 1
+) this_table
