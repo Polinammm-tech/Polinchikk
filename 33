@@ -1,0 +1,5 @@
+Укажите корабли, потопленные в сражениях в Северной Атлантике (North Atlantic). Вывод: ship.
+
+SELECT ship
+FROM outcomes
+WHERE result = 'sunk' and battle = 'North Atlantic' 
