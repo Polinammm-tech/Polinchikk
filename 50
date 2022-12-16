@@ -1,0 +1,6 @@
+Найдите сражения, в которых участвовали корабли класса Kongo из таблицы Ships.
+
+SELECT distinct (out.battle)
+FROM outcomes out 
+JOIN ships sh on out.ship = sh.name
+WHERE sh.class = 'Kongo' 
