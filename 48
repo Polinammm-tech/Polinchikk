@@ -1,0 +1,9 @@
+Найдите классы кораблей, в которых хотя бы один корабль был потоплен в сражении.
+
+  SELECT class as result 
+   FROM ships 
+  WHERE name in (select ship from outcomes where result='sunk')   
+  UNION  
+  SELECT ship as result 
+  FROM outcomes  
+  WHERE ship not in (select name from ships) and ship in (select class from classes) and result='sunk' 
