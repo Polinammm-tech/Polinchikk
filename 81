@@ -1,0 +1,11 @@
+Из таблицы Outcome получить все записи за тот месяц (месяцы), с учетом года, в котором суммарное значение расхода (out) было максимальным. 
+
+SELECT O.*
+FROM outcome O
+INNER JOIN
+(
+SELECT TOP 1 WITH TIES YEAR(date) AS Y, MONTH(date) AS M, SUM(out) AS ALL_TOTAL
+FROM outcome
+GROUP BY YEAR(date), MONTH(date)
+ORDER BY ALL_TOTAL DESC
+) R ON YEAR(O.date) = R.Y AND MONTH(O.date) = R.M
