@@ -1,0 +1,11 @@
+При условии, что баллончики с красной краской использовались более одного раза, выбрать из них такие, которыми окрашены квадраты, имеющие голубую компоненту. Вывести название баллончика
+
+with r as (select v.v_name,
+v.v_id,
+count(case when v_color = 'R' then 1 end) over(partition by v_id) cnt_r,
+count(case when v_color = 'B' then 1 end) over(partition by b_q_id) cnt_b
+FROM utV v join utB b on v.v_id = b.b_v_id)
+SELECT v_name
+FROM r
+WHERE cnt_r > 1 AND cnt_b > 0
+GROUP BY v_name
