@@ -1,0 +1,9 @@
+Для классов, имеющих потери в виде потопленных кораблей и не менее 3 кораблей в базе данных, вывести имя класса и число потопленных кораблей.:
+
+SELECT class, COUNT(ship) count_sunked
+FROM (SELECT name, class FROM ships
+      UNION
+      SELECT ship, ship FROM outcomes) t
+LEFT JOIN outcomes ON name = ship AND result = 'sunk'
+GROUP BY class
+HAVING COUNT(ship) > 0 AND COUNT(*) > 2;
