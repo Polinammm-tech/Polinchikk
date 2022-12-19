@@ -1,0 +1,17 @@
+Для тех производителей, у которых есть продукты с известной ценой хотя бы в одной из таблиц Laptop, PC, Printer найти максимальные цены на каждый из типов продукции. Вывод: maker, максимальная цена на ноутбуки, максимальная цена на ПК, максимальная цена на принтеры. Для отсутствующих продуктов/цен использовать NULL. Решение:
+
+SELECT shipname,launched,batname
+FROM
+(SELECT s.name as shipname,launched,b.name as batname,
+row_number() over (partition by s.name order by "date") as num
+FROM ships s,battles b
+WHERE to_char("date",'yyyy')>=launched
+AND launched is not null)
+WHERE num = 1
+UNION
+(
+SELECT name,launched,(SELECT name FROM battles
+WHERE "date" = (SELECT MAX("date") FROM battles)) as batname
+FROM ships
+WHERE launched is null
+)
