@@ -1,0 +1,24 @@
+Пронумеровать уникальные пары {maker, type} из Product, упорядочив их следующим образом: имя производителя (maker) по возрастанию; тип продукта (type) в порядке PC, Laptop, Printer. Если некий производитель выпускает несколько типов продукции, то выводить его имя только в первой строке; остальные строки для ЭТОГО производителя должны содержать пустую строку символов (''). Решение:
+
+SELECT row_number() over(ORDER BY maker,s),t, type FROM
+(SELECT maker,type,
+CASE
+WHEN type='PC'
+THEN 0
+WHEN type='Laptop'
+THEN 1
+ELSE 2
+END AS s,
+CASE
+WHEN type='Laptop' AND (maker in (SELECT maker FROM Product WHERE
+type='PC'))
+THEN ''
+WHEN type='Printer' AND ((maker in (SELECT maker FROM Product WHERE
+type='PC')) OR (maker in (SELECT maker FROM Product WHERE
+type='Laptop')))
+THEN ''
+ELSE maker
+END AS t
+FROM Product
+GROUP BY maker,type) AS t1
+ORDER BY maker, s
