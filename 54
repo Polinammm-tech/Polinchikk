@@ -1,0 +1,10 @@
+С точностью до 2-х десятичных знаков определите среднее число орудий всех линейных кораблей (учесть корабли из таблицы Outcomes).
+
+SELECT CAST(AVG(numguns*1.0) AS NUMERIC(6,2)) as AVG_nmg 
+FROM (SELECT ship, numguns, type FROM Outcomes 
+JOIN classes ON ship = class
+UNION
+SELECT name, numguns, type 
+FROM ships s 
+JOIN classes c ON c.class = s.class) as x 
+WHERE type = 'bb'
