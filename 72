@@ -1,0 +1,14 @@
+Среди тех, кто пользуется услугами только какой-нибудь одной компании, определить имена разных пассажиров, летавших чаще других. Вывести: имя пассажира и число полетов. Решение:
+
+SELECT TOP 1 WITH TIES name, c3 FROM passenger
+JOIN
+(SELECT c1, max(c3) c3 FROM
+(
+SELECT pass_in_trip.ID_psg c1, Trip.ID_comp c2, count(*) c3 FROM pass_in_trip
+JOIN trip ON trip.trip_no=pass_in_trip.trip_no
+GROUP BY pass_in_trip.ID_psg, Trip.ID_comp
+) as t
+group by c1
+HAVING count(*)=1) as tt
+ON ID_psg=c1
+ORDER BY c3 DESC
