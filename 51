@@ -1,0 +1,23 @@
+Найдите названия кораблей, имеющих наибольшее число орудий среди всех имеющихся кораблей такого же водоизмещения (учесть корабли из таблицы Outcomes).
+
+SELECT NAME 
+FROM
+(
+SELECT name as NAME, displacement, numguns 
+FROM ships 
+INNER JOIN classes ON ships.class = classes.class 
+UNION 
+SELECT ship as NAME, displacement, numguns 
+FROM outcomes 
+INNER JOIN classes ON outcomes.ship= classes.class) as d1 
+INNER JOIN (SELECT displacement, max(numGuns) as numguns 
+FROM
+( 
+SELECT displacement, numguns 
+FROM ships 
+INNER JOIN classes ON ships.class = classes.class 
+UNION 
+SELECT displacement, numguns 
+FROM outcomes 
+INNER JOIN classes ON outcomes.ship= classes.class) as f 
+GROUP BY displacement) as d2 ON d1.displacement=d2.displacement AND d1.numguns =d2.numguns
