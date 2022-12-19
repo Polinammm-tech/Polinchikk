@@ -1,0 +1,15 @@
+Найти количество маршрутов, которые обслуживаются наибольшим числом рейсов. Замечания.1) A - B и B - A считать ОДНИМ И ТЕМ ЖЕ маршрутом. 2) Использовать только таблицу Trip Решение:
+
+SELECT count(*) as Count FROM (
+SELECT TOP 1 WITH TIES sum(c) cc, c1, c2 FROM (
+SELECT count(*) c, town_from c1, town_to c2 FROM trip
+WHERE town_from>=town_to
+GROUP BY town_from, town_to
+UNION ALL
+SELECT count(*) c,town_to, town_from FROM trip
+WHERE town_to>town_from
+GROUP BY town_from, town_to
+) as t
+GROUP BY c1,c2
+ORDER BY cc DESC
+) as tt
