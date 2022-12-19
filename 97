@@ -1,0 +1,12 @@
+Отобрать из таблицы Laptop те строки, для которых выполняется следующее условие: значения из столбцов speed, ram, price, screen возможно расположить таким образом, что каждое последующее значение будет превосходить предыдущее в 2 раза или более. Замечание: все известные характеристики ноутбуков больше нуля. Вывод: code, speed, ram, price, screen.
+ 
+SELECT code, speed, ram, price, screen
+FROM laptop WHERE exists (
+SELECT 1 x
+FROM (
+SELECT v, rank()over(order by v) rn
+FROM( select cast(speed as float) sp, cast(ram as float) rm,
+CAST(price as float) pr, cast(screen as float) sc
+)l unpivot(v for c in (sp, rm, pr, sc))u
+)l pivot(max(v) for rn in ([1],[2],[3],[4]))p
+WHERE [1]*2 <= [2] and [2]*2 <= [3] AND [3]*2 <= [4]
