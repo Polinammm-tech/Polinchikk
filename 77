@@ -1,0 +1,10 @@
+Определить дни, когда было выполнено максимальное число рейсов из Ростова ('Rostov'). Вывод: число рейсов, дата. 
+
+SELECT TOP 1 WITH TIES * FROM
+	(SELECT
+		COUNT(distinct(pt.trip_no)) qty, pt.date
+	FROM
+		Trip t, Pass_in_trip pt
+	WHERE t.trip_no=pt.trip_no AND t.town_from = 'Rostov'
+	GROUP BY pt.date) t1
+ORDER BY t1.qty DESC
