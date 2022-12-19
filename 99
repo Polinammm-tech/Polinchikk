@@ -1,0 +1,13 @@
+Рассматриваются только таблицы Income_o и Outcome_o. Известно, что прихода/расхода денег в воскресенье не бывает. Для каждой даты прихода денег на каждом из пунктов определить дату инкассации по следующим правилам: 1. Дата инкассации совпадает с датой прихода, если в таблице Outcome_o нет записи о выдаче денег в эту дату на этом пункте. 2. В противном случае - первая возможная дата после даты прихода денег, которая не является воскресеньем и в Outcome_o не отмечена выдача денег сдатчикам вторсырья в эту дату на этом пункте. Вывод: пункт, дата прихода денег, дата инкассации.
+
+SELECT point,"date" income_date,"date" + nvl (min(case when diff > cnt then cnt else null end), max(cnt)+1
+) incass_date
+FROM (SELECT i.point, i."date", (trunc(o."date") - trunc(i."date")) diff,
+count(1) over (partition by i.point, i."date" order by o."date" rows between unbounded preceding and current row)-1 cnt
+FROM income_o i
+JOIN (select point, "date", 1 disabled FROM outcome_o
+UNION
+SELECT point, trunc("date"+7,'DAY'), 1 disabled FROM income_o) o
+ON i.point = o.point
+WHERE o."date" > = i."date")
+GROUP BY point, "date"
