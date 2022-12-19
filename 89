@@ -1,0 +1,11 @@
+Найти производителей, у которых больше всего моделей в таблице Product, а также тех, у которых меньше всего моделей. Вывод: maker, число моделей:
+
+SELECT Maker , count(distinct model) Qty FROM Product
+GROUP BY maker
+HAVING count(distinct model) > = ALL
+(SELECT count(distinct model) FROM Product
+GROUP BY maker)
+or
+count(distinct model) <= ALL
+(SELECT count(distinct model) FROM Product
+GROUP BY maker)
