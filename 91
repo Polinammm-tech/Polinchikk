@@ -1,0 +1,9 @@
+C точностью до двух десятичных знаков определить среднее количество краски на квадрате. 
+SELECT count(maker)
+FROM product
+WHERE maker in
+(
+  SELECT maker FROM product
+  GROUP BY maker
+  HAVING count(model) = 1
+)
