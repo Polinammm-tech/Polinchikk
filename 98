@@ -1,0 +1,14 @@
+Вывести список ПК, для каждого из которых результат побитовой операции ИЛИ, примененной к двоичным представлениям скорости процессора и объема памяти, содержит последовательность из не менее четырех идущих подряд единичных битов. Вывод: код модели, скорость процессора, объем памяти.
+:
+with CTE AS
+(SELECT
+1 n, cast (0 as varchar(16)) bit_or,
+code, speed, ram FROM PC
+UNION ALL
+SELECT n*2,
+cast (convert(bit,(speed|ram)&n) as varchar(1))+cast(bit_or as varchar(15))
+, code, speed, ram
+FROM CTE WHERE n < 65536
+)
+SELECT code, speed, ram FROM CTE
+WHERE n = 65536 AND CHARINDEX('1111', bit_or )> 0
