@@ -1,0 +1,18 @@
+Для каждого типа продукции и каждого производителя из таблицы Product c точностью до двух десятичных знаков найти процентное отношение числа моделей данного типа данного производителя к общему числу моделей этого производителя. Вывод: maker, type, процентное отношение числа моделей данного типа к общему числу моделей производителя:
+
+SELECT m, t,
+CAST(100.0*cc/cc1 AS NUMERIC(5,2))
+FROM
+(SELECT m, t, sum(c) cc from
+(SELECT DISTINCT maker m, 'PC' t, 0 c FROM product
+UNION ALL
+SELECT DISTINCT maker, 'Laptop', 0 FROM product
+UNION ALL
+SELECT DISTINCT maker, 'Printer', 0 FROM product
+UNION ALL
+SELECT maker, type, count(*) FROM product
+GROUP BY maker, type) as tt
+GROUP BY m, t) tt1
+JOIN (
+SELECT maker, count(*) cc1 FROM product GROUP BY maker
+) tt2
