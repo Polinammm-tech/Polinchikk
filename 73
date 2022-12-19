@@ -1,0 +1,11 @@
+Для каждой страны определить сражения, в которых не участвовали корабли данной страны. Вывод: страна, сражение 
+
+SELECT c.country, b.name
+FROM Classes c, Battles b
+EXCEPT
+SELECT c.country, o.battle
+FROM Outcomes o
+LEFT JOIN ships s ON o.ship=s.name
+LEFT JOIN Classes c ON o.ship=c.class OR s.class=c.class
+WHERE c.country is not null
+GROUP BY c.country, o.battle
