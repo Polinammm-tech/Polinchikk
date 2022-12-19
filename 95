@@ -1,0 +1,10 @@
+На основании информации из таблицы Pass_in_Trip, для каждой авиакомпании определить: 1) количество выполненных перелетов; 2) число использованных типов самолетов; 3) количество перевезенных различных пассажиров; 4) общее число перевезенных компанией пассажиров. Вывод: Название компании, 1), 2), 3), 4).
+ 
+SELECT name,
+COUNT(DISTINCT CONVERT(CHAR(24),date)+CONVERT(CHAR(4),Trip.trip_no)),
+COUNT(DISTINCT plane),
+COUNT(DISTINCT ID_psg),
+COUNT(*)
+FROM Company,Pass_in_trip,Trip
+WHERE Company.ID_comp=Trip.ID_comp and Trip.trip_no=Pass_in_trip.trip_no
+GROUP BY Company.ID_comp,name
