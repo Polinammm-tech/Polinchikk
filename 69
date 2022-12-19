@@ -1,0 +1,19 @@
+По таблицам Income и Outcome для каждого пункта приема найти остатки денежных средств на конец каждого дня, в который выполнялись операции по приходу и/или расходу на данном пункте. Учесть при этом, что деньги не изымаются, а остатки/задолженность переходят на следующий день. Вывод: пункт приема, день в формате "dd/mm/yyyy", остатки/задолженность на конец этого дня. Решение:
+
+with q as (
+SELECT
+    isnull(i.point, o.point) point
+    , isnull(i.date, o.date) date
+    , coalesce(sum(i.inc), 0) - coalesce(sum(o.out), 0) balance
+    FROM income i
+    FULL JOIN outcome o
+      ON i.point=o.point AND i.date=o.date AND i.code=o.code
+    GROUP BY isnull(i.point, o.point), isnull(i.date, o.date)
+)
+ SELECT
+  point
+    -- 103 means format "dd/mm/yyyy"
+  , convert(varchar, date, 103) day
+  , sum(balance) over(partition by point order by date RANGE UNBOUNDED PRECEDING) as rem
+  FROM q
+ORDER BY point,date
