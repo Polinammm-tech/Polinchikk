@@ -1,0 +1,11 @@
+Посчитать остаток денежных средств на всех пунктах приема для базы данных с отчетностью не чаще одного раза в день.:
+
+SELECT sum(i) FROM
+(SELECT point, SUM(inc) as i FROM
+income_o
+GROUP BY point
+UNION
+SELECT point, -sum(out) as i FROM
+outcome_o
+GROUP BY point
+) as t
