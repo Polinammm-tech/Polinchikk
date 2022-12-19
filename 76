@@ -1,0 +1,31 @@
+Определить время, проведенное в полетах, для пассажиров, летавших всегда на разных местах. Вывод: имя пассажира, время в минутах. 
+
+with pf as(
+  SELECT id_psg, count(*) as place_count
+  FROM pass_in_trip
+  GROUP BY id_psg, place
+),
+pt as(
+  SELECT
+    pt.id_psg, pt.trip_no
+    , ps.name
+    , time_out, time_in
+    , CASE when time_out >= time_in
+        then time_in-time_out + 1440
+        else time_in-time_out
+    end as time
+  FROM pass_in_trip pt
+  JOIN passenger ps ON ps.id_psg=pt.id_psg
+  JOIN (
+    SELECT
+      datepart(hh, time_out)*60 + datepart(mi, time_out) time_out
+      , datepart(hh, time_in)*60 + datepart(mi, time_in) time_in
+      , trip_no
+    FROM trip t
+  ) as t ON t.trip_no=pt.trip_no
+  WHERE 1=ALL(select place_count FROM pf WHERE pf.id_psg=pt.id_psg)
+)
+SELECT
+  name, sum(time) fly_time
+FROM pt
+GROUP BY id_psg, name
